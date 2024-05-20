@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /nextjs/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./

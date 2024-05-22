@@ -1,6 +1,5 @@
-import { Typography } from '@mui/material';
-import { useState } from 'react';
+import Board from './components/Board';
 
 export default function Home() {
-  return <Typography>Board Page</Typography>;
+  return <Board />;
 }

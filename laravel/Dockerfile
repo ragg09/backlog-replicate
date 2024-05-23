@@ -1,5 +1,8 @@
 FROM php:8.1-fpm
 
+# Setting User and Permission
+RUN useradd -ms /bin/bash backlog
+
 # Set working directory
 WORKDIR /var/www/html
 
@@ -30,6 +33,9 @@ RUN docker-php-ext-install pdo_mysql zip exif pcntl sockets
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Set Permission
+USER backlog
 
 EXPOSE 9005
 CMD php artisan serve --host=0.0.0.0 --port=9005

@@ -21,12 +21,13 @@ class UpdateTaskRequest extends FormRequest
      */
     public function rules(): array
     {
+        // update the nullable later
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'type' => 'required|in:task,bug,other',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'type' => 'nullable|string|max:255',
             'status' => 'required|in:open,in-progress,for-review,closed',
-            'priority' => 'required|in:low,normal,high',
+            'priority' => 'nullable|string|max:255',
             'assignee' => 'nullable|string|max:255',
             'start_date' => 'nullable|date',
             'due_date' => 'nullable|date',

@@ -9,6 +9,7 @@ WIREFRAME: backlog site
 ### FE
 
 -   NextJS v14.2.3
+-   Redux Toolkit
 
 ### BE
 

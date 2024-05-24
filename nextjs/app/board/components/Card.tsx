@@ -1,43 +1,22 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { styled } from '@mui/system';
-import { Paper } from '@mui/material';
+import { TaskData } from '@/utils/Interface';
+import { CardContainer } from '../styles';
 
-const Container = styled(Paper)(({ theme, isDragging, isDraggable, isBacklog }) => ({
-  borderRadius: 10,
-  boxShadow: '5px 5px 5px 2px grey',
-  padding: theme.spacing(1),
-  color: theme.palette.text.primary,
-  marginBottom: theme.spacing(1),
-  minHeight: 120,
-  marginLeft: theme.spacing(1),
-  marginRight: theme.spacing(1),
-  backgroundColor: isDragging
-    ? 'lightgreen'
-    : isDraggable
-    ? isBacklog
-      ? '#F2D7D5'
-      : '#DCDCDC'
-    : isBacklog
-    ? '#F2D7D5'
-    : '#EAF4FC',
-  cursor: 'pointer',
-  display: 'flex',
-  justifyContent: 'space-between',
-  flexDirection: 'column',
-}));
+interface CardProps {
+  task: TaskData;
+  index: number;
+}
 
-export default function Card({ task, index }) {
+export default function Card({ task, index }: CardProps) {
   return (
-    <Draggable draggableId={`${task.id}`} key={task.id} index={index}>
+    <Draggable draggableId={`${task.id}`} index={index}>
       {(provided, snapshot) => (
-        <Container
+        <CardContainer
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
-          isDraggable={snapshot.isDraggable}
-          isBacklog={task.isBacklog}
         >
           <div style={{ display: 'flex', justifyContent: 'start', padding: 2 }}>
             <span>
@@ -50,16 +29,7 @@ export default function Card({ task, index }) {
           <div style={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
             <div>{task.title}</div>
           </div>
-          {/* <Icons>
-            <div>
-              <Avatar
-                onClick={() => console.log(task)}
-                src={'https://joesch.moe/api/v1/random?key=' + task.id}
-              />
-            </div>
-          </Icons> */}
-          {provided.placeholder}
-        </Container>
+        </CardContainer>
       )}
     </Draggable>
   );

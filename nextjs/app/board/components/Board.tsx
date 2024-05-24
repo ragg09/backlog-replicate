@@ -1,102 +1,62 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
-import { Grid, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { DragDropContext, type DropResult } from 'react-beautiful-dnd';
+import { Grid } from '@mui/material';
 import Column from './Column';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { useGetTaskQuery, useUpdateTaskMutation } from '@/redux/services/taskAPI';
+import { taskSegregation, updateStatus } from '@/redux/features/taskSlice';
+import { TaskStatus, statusDetails } from '@/utils/constants';
+import { TaskStateType } from '@/utils/Interface';
+import { convertBoardIdToStatus } from '@/utils/helpers/task';
 
 export default function Board() {
-  const [completed, setCompleted] = useState([]);
-  const [incomplete, setIncomplete] = useState([]);
-  const [backlog, setBacklog] = useState([]);
-  const [inReview, setInReview] = useState([]);
+  const dispatch = useAppDispatch();
+  const taskStatusValues: TaskStatus[] = Object.values(TaskStatus) as TaskStatus[];
+  const state = useAppSelector((state) => state);
+  const { data, isLoading } = useGetTaskQuery(undefined);
+  const [updateTask, { isLoading: isUpdating, data: updateTaskData }] = useUpdateTaskMutation();
 
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then((response) => response.json())
-      .then((json) => {
-        const completedTasks = json.filter((task) => task.completed);
-        const incompleteTasks = json.filter((task) => !task.completed);
+  const handleDragEnd = async (result: DropResult) => {
+    const { source, destination, draggableId } = result;
+    if (!destination) return;
 
-        // Limiting to 10 tasks for each category
-        setCompleted(completedTasks.slice(0, 5));
-        setIncomplete(incompleteTasks.slice(0, 5));
-      });
-  }, []);
+    updateTask({
+      id: draggableId,
+      data: {
+        status: convertBoardIdToStatus(destination.droppableId),
+      },
+    });
 
-  const handleDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-
-    if (!destination || source.droppableId === destination.droppableId) return;
-
-    deletePreviousState(source.droppableId, draggableId);
-
-    const task = findItemById(draggableId, [...incomplete, ...completed, ...inReview, ...backlog]);
-
-    setNewState(destination.droppableId, task);
+    dispatch(
+      updateStatus({
+        id: parseInt(draggableId),
+        destination: destination.droppableId as TaskStateType,
+        source: source.droppableId as TaskStateType,
+      })
+    );
   };
 
-  function deletePreviousState(sourceDroppableId, taskId) {
-    switch (sourceDroppableId) {
-      case '1':
-        setIncomplete(removeItemById(taskId, incomplete));
-        break;
-      case '2':
-        setCompleted(removeItemById(taskId, completed));
-        break;
-      case '3':
-        setInReview(removeItemById(taskId, inReview));
-        break;
-      case '4':
-        setBacklog(removeItemById(taskId, backlog));
-        break;
+  useEffect(() => {
+    if (!isLoading && data) {
+      dispatch(taskSegregation(data));
     }
-  }
-
-  function setNewState(destinationDroppableId, task) {
-    let updatedTask;
-    switch (destinationDroppableId) {
-      case '1': // TO DO
-        updatedTask = { ...task, completed: false };
-        setIncomplete([updatedTask, ...incomplete]);
-        break;
-      case '2': // DONE
-        updatedTask = { ...task, completed: true };
-        setCompleted([updatedTask, ...completed]);
-        break;
-      case '3': // IN REVIEW
-        updatedTask = { ...task, completed: false };
-        setInReview([updatedTask, ...inReview]);
-        break;
-      case '4': // BACKLOG
-        updatedTask = { ...task, completed: false };
-        setBacklog([updatedTask, ...backlog]);
-        break;
-    }
-  }
-
-  function findItemById(id, array) {
-    return array.find((item) => item.id == id);
-  }
-
-  function removeItemById(id, array) {
-    return array.filter((item) => item.id != id);
-  }
+  }, [data, isLoading]);
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Grid container spacing={5} justifyContent="center">
-        <Grid item xs={12} sm={6} md={3}>
-          <Column title={'TO DO'} tasks={incomplete} id={'1'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Column title={'DONE'} tasks={completed} id={'2'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Column title={'IN REVIEW'} tasks={inReview} id={'3'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Column title={'BACKLOG'} tasks={backlog} id={'4'} />
-        </Grid>
+        {taskStatusValues.map((status: TaskStatus) => (
+          <Grid key={status} item xs={12} sm={6} md={3}>
+            {statusDetails[status] && (
+              <Column
+                title={statusDetails[status].title}
+                tasks={state.tasks[statusDetails[status].state as keyof typeof state.tasks]}
+                id={statusDetails[status].state}
+              />
+            )}
+          </Grid>
+        ))}
       </Grid>
     </DragDropContext>
   );

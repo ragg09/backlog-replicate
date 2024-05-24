@@ -15,7 +15,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return response()->json(['message' => 'hello world']);
+        return response()->json(Task::all());
     }
 
     /**

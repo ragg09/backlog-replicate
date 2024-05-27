@@ -1,19 +1,37 @@
 import React from 'react';
 import Card from './Card';
 import { Droppable } from 'react-beautiful-dnd';
-import { ColumnContainer, ColumnTitle, TaskList } from '../styles';
-import { TaskData } from '@/utils/Interface';
+import {
+  ColumnContainer,
+  ColumnCount,
+  ColumnTitle,
+  ColumnTitleContainer,
+  ColumnTitleWrapper,
+  TaskList,
+} from '../styles';
+import { TaskColor, TaskData } from '@/utils/Interface';
+import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
+import AddIcon from '@mui/icons-material/Add';
 
 interface ColumnProps {
   title: string;
-  tasks: TaskData[]; // Assuming tasks is an array of TaskData
+  color: TaskColor;
+  tasks: TaskData[];
   id: string;
 }
 
-export default function Column({ title, tasks, id }: ColumnProps) {
+export default function Column({ title, color, tasks, id }: ColumnProps) {
   return (
     <ColumnContainer elevation={3} className="column">
-      <ColumnTitle variant="h6">{title}</ColumnTitle>
+      <ColumnTitleWrapper>
+        <ColumnTitleContainer>
+          <CircleRoundedIcon fontSize="small" style={{ color }} />
+          <ColumnTitle variant="body1">{title}</ColumnTitle>
+          <ColumnCount>{tasks.length}</ColumnCount>
+        </ColumnTitleContainer>
+
+        {title === 'Open' && <AddIcon sx={{ color: '#787878', marginRight: '8px' }} />}
+      </ColumnTitleWrapper>
       <Droppable droppableId={id}>
         {(provided, snapshot) => (
           <TaskList

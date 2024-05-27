@@ -19,7 +19,8 @@ export default function Board() {
 
   const handleDragEnd = async (result: DropResult) => {
     const { source, destination, draggableId } = result;
-    if (!destination) return;
+
+    if (!destination || destination.droppableId === source.droppableId) return;
 
     updateTask({
       id: draggableId,
@@ -45,12 +46,13 @@ export default function Board() {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Grid container spacing={5} justifyContent="center">
+      <Grid container style={{ width: '1600px' }}>
         {taskStatusValues.map((status: TaskStatus) => (
-          <Grid key={status} item xs={12} sm={6} md={3}>
+          <Grid key={status} item xs={3}>
             {statusDetails[status] && (
               <Column
                 title={statusDetails[status].title}
+                color={statusDetails[status].color}
                 tasks={state.tasks[statusDetails[status].state as keyof typeof state.tasks]}
                 id={statusDetails[status].state}
               />

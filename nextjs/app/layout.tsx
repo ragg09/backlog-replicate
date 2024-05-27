@@ -19,7 +19,7 @@ export default function RootLayout({
         <Provider store={store}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Box display="flex" height="100vh">
+            <Box display="flex" height="100vh" sx={{ background: '#F0F0F0' }}>
               <Sidebar />
               <Box
                 component="main"
@@ -28,6 +28,7 @@ export default function RootLayout({
                   p: 3,
                   transition: 'margin-left 0.3s',
                   ml: 0,
+                  overflowY: 'hidden',
                 }}
               >
                 {children}

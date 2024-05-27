@@ -1,4 +1,4 @@
-import { TaskStatus as TaskStatusType } from '@/utils/Interface/Task';
+import { TaskColor, TaskStatus as TaskStatusType } from '@/utils/Interface/Task';
 
 export enum TaskStatus {
   OPEN,
@@ -9,10 +9,20 @@ export enum TaskStatus {
 
 export const statusDetails: Record<
   TaskStatus,
-  { title: string; id: TaskStatusType; state: string }
+  { title: string; id: TaskStatusType; state: string; color: TaskColor }
 > = {
-  [TaskStatus.OPEN]: { title: 'Open', id: 'open', state: 'open' },
-  [TaskStatus.IN_PROGRESS]: { title: 'In Progress', id: 'in-progress', state: 'inProgress' },
-  [TaskStatus.FOR_REVIEW]: { title: 'For Review', id: 'for-review', state: 'forReview' },
-  [TaskStatus.CLOSED]: { title: 'Closed', id: 'closed', state: 'closed' },
+  [TaskStatus.OPEN]: { title: 'Open', id: 'open', state: 'open', color: '#ED8077' },
+  [TaskStatus.IN_PROGRESS]: {
+    title: 'In Progress',
+    id: 'in-progress',
+    state: 'inProgress',
+    color: '#4488C5',
+  },
+  [TaskStatus.FOR_REVIEW]: {
+    title: 'For Review',
+    id: 'for-review',
+    state: 'forReview',
+    color: '#DC9925',
+  },
+  [TaskStatus.CLOSED]: { title: 'Closed', id: 'closed', state: 'closed', color: '#A1AF2F' },
 };

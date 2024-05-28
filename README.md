@@ -20,6 +20,8 @@ WIREFRAME: backlog site
 ### Tools
 
 -   Docker
+-   TypeScript
+-   ESLint
 -   Makefile
 
 ## Getting Started (Quick Guide)

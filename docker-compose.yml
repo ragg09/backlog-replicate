@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+
+  # NextJS Service
+  nextjs:
+    container_name: nextjs
+    build:
+      context: ./nextjs
+      dockerfile: Dockerfile
+    volumes:
+      - ./nextjs:/nextjs/app
+      - /nextjs/app/node_modules
+      - /nextjs/app/.next
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - backlog-replicate-net
+
+  # PHP Service
+  laravel:
+    build:
+      context: ./laravel
+      dockerfile: Dockerfile
+    container_name: laravel
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: laravel
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html
+    ports:
+      - '9005:9005'
+    volumes:
+      - ./laravel:/var/www/html
+    networks:
+      - backlog-replicate-net
+
+  # SQL Service
+  backlog-replicate-database:
+    image: mysql:8.0.33
+    container_name: backlog-replicate-database
+    tty: true
+    restart: unless-stopped
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: backlog
+      MYSQL_USER: backlog
+      MYSQL_PASSWORD: Password123
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    networks:
+      - backlog-replicate-net
+
+# Docker Networks
+networks:
+  backlog-replicate-net:
+    driver: bridge

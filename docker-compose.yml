@@ -19,6 +19,23 @@ services:
     networks:
       - backlog-replicate-net
 
+  # NestJS Service
+  nestjs:
+    container_name: nestjs
+    build:
+      context: ./nestjs
+      dockerfile: Dockerfile
+    volumes:
+      - ./nestjs:/nestjs/app
+      - /nestjs/app/node_modules
+      - /nestjs/app/.next
+    ports:
+      - "9010:9010"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - backlog-replicate-net
+
   # PHP Service
   laravel:
     build:

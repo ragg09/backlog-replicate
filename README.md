@@ -33,10 +33,11 @@ git clone https://github.com/ragg09/backlog-replicate.git
 
 ```
 
-### 2. Create .env file for all frameworks.
+### 2. Create .env file for all frameworks & install vendor | node modules.
 
 ```
 make env
+make vendor-and-node-modules
 ```
 
 ### 3. Add Database Credentials

@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
 
@@ -28,7 +28,6 @@ services:
     volumes:
       - ./nestjs:/nestjs/app
       - /nestjs/app/node_modules
-      - /nestjs/app/.next
     ports:
       - "9010:9010"
     environment:

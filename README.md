@@ -15,7 +15,7 @@ WIREFRAME: backlog site
 
 -   Laravel 10.48.10
 -   RoR
--   NestJS
+-   NestJS (To Follow)
 
 ### Tools
 

@@ -10,6 +10,8 @@ WIREFRAME: backlog site
 
 -   NextJS v14.2.3
 -   Redux Toolkit
+-   React Beautiful DnD
+-   React Markdown Editor
 
 ### BE
 

@@ -10,12 +10,14 @@ WIREFRAME: backlog site
 
 -   NextJS v14.2.3
 -   Redux Toolkit
+-   React Beautiful DnD
+-   React Markdown Editor
 
 ### BE
 
 -   Laravel 10.48.10
 -   RoR
--   NestJS
+-   NestJS (To Follow)
 
 ### Tools
 
@@ -33,10 +35,11 @@ git clone https://github.com/ragg09/backlog-replicate.git
 
 ```
 
-### 2. Create .env file for all frameworks.
+### 2. Create .env file for all frameworks & install vendor | node modules.
 
 ```
 make env
+make vendor-and-node-modules
 ```
 
 ### 3. Add Database Credentials

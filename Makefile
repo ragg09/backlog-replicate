@@ -1,6 +1,10 @@
 env:
 	@make env-laravel
 	@make env-nextjs
+vendor-and-node-modules:
+	cd laravel && composer install
+	cd nestjs && npm install
+	cd nextjs && npm install
 setup:
 	@make build
 	@make vendor
